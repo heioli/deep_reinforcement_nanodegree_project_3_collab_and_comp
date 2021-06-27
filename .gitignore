@@ -133,3 +133,8 @@ Tennis_Linux
 Tennis_Linux_NoVis
 Tennis_Linux.zip
 Tennis_Linux_NoVis.zip
+model_c1.py
+model_w.py
+ddpg_agent_c1.py
+ddpg_agent_w.py
+excluded

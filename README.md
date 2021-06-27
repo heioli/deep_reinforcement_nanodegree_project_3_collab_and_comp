@@ -6,9 +6,11 @@
 
 # Project 3: Collaboration and Competition
 
+This project is the solution to Project 3 of the Udacity Deep Reinforcement Learning Nanodegree.
+
 ### Introduction
 
-For this project, you will work with the [Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment.
+In this project, the [Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment is used.
 
 ![Trained Agent][image1]
 
@@ -25,6 +27,11 @@ The environment is considered solved, when the average (over 100 episodes) of th
 
 ### Getting Started
 
+#### Dependencies
+To run the code, the *udacity deep reinforcement learning* environment is required to be present on your machine. Prerequisite is a local Anaconda installation. To build the **drlnd** environment from scratch please follow the instructions at: [Install drlnd environment](https://github.com/udacity/deep-reinforcement-learning/blob/master/README.md#dependencies).
+
+#### The Environmnets
+
 1. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
     - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
     - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
@@ -39,7 +46,7 @@ The environment is considered solved, when the average (over 100 episodes) of th
 
 ### Instructions
 
-Follow the instructions in `Tennis.ipynb` to get started with training your own agent!  
+Follow the instructions in `Tennis.ipynb` to reperform training. Training can be performed using a CPU or GPU environment.
 
 ### (Optional) Challenge: Crawler Environment
 

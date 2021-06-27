@@ -13,14 +13,14 @@ import torch.optim as optim
 BUFFER_SIZE = int(1e6)  # replay buffer size
 BATCH_SIZE = 256        # minibatch size
 GAMMA = 0.99            # discount factor
-TAU = 1e-3              # for soft update of target parameters
-LR_ACTOR = 1.5e-4       # learning rate of the actor 
+TAU = 1e-2              # for soft update of target parameters
+LR_ACTOR = 1e-3         # learning rate of the actor 
 LR_CRITIC = 1e-3        # learning rate of the critic
 WEIGHT_DECAY = 0        # L2 weight decay
 
 # Parameters for step_multi update: Every T_UPDATE, update the network N_UPDATE times
-T_UPDATE = 20
-N_UPDATE = 10
+T_UPDATE = 1
+N_UPDATE = 3
 
 # Parameters for Epsilon Decay --> reduce noise over time
 EPS = 1                 # Initial epsilon
@@ -87,16 +87,6 @@ class Agent():
             for i in range(N_UPDATE):
                 experiences = self.memory.sample()
                 self.learn(experiences, GAMMA)
-
-    def add_to_memory(self, state, action, reward, next_state, done):
-        """Individual add-to-replay-buffer function: Add experience / reward to shared memory"""
-        self.memory.add(state, action, reward, next_state, done)
-
-    def multi_agent_step(self):
-        """Individual update function: Perform learn - if enough samples are available in memory"""
-        if len(self.memory) > BATCH_SIZE:
-            experiences = self.memory.sample()
-            self.learn(experiences, GAMMA)
 
     def act(self, state, add_noise=True):
         """Returns actions for given state as per current policy."""
@@ -227,3 +217,35 @@ class ReplayBuffer:
     def __len__(self):
         """Return the current size of internal memory."""
         return len(self.memory)
+
+class maddpg:
+    """Minimal maddpg agent"""
+
+    def __init__(self, state_size, action_size, random_seed = 0):
+        super(maddpg, self).__init__()
+
+        # Initialize two agents
+        self.agents = [Agent(state_size, action_size, random_seed = random_seed), 
+                        Agent(state_size, action_size, random_seed = random_seed)]
+        
+        # Replay memory
+        self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
+
+    def act(self, states):
+        """get actions from all agents in the MADDPG object"""
+        # actions = [agent.act(state) for agent, state in zip(self.agents, states)]
+        actions = [agent.act(np.reshape(state, (1,-1))) for agent, state in zip(self.agents, states)]
+        return actions
+
+    def step(self, states, actions, rewards, next_states, dones, timestep):
+        """Save experience in replay memory, and use random sample from buffer to learn."""
+        # Save experience / reward for 
+        for state, action, reward, next_state, done in zip(states, actions, rewards, next_states, dones):
+            self.memory.add(state, action, reward, next_state, done)
+
+        # Learn, if enough samples are available in memory. Only update ever T_UPDATE timestep
+        if (len(self.memory) > BATCH_SIZE) and (timestep % T_UPDATE == 0):
+            for agent in self.agents:
+                for i in range(N_UPDATE):
+                    experiences = self.memory.sample()
+                    agent.learn(experiences, GAMMA)
